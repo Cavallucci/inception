@@ -1,0 +1,50 @@
+version: '3' # latest version of docker compose
+
+volumes:
+    data: {}
+
+services:
+
+#-------------- MARIADB -------------#
+    mariadb:
+        image: debian:buster
+        restart: on-failure
+        expose:
+            - "3306"
+        env_file:
+            - .env
+        networks:
+            - inception
+        tty: true
+
+#--------------- NGINX --------------#
+    nginx:
+        image: debian:buster
+        restart: on-failure
+        env_file:
+            - .env
+        ports:
+            - "443:443"
+        volumes:
+            - data:/var/www/html
+        networks:
+            - inception
+        tty: true
+
+#------------- WORDPRESS ------------#
+    wordpress:
+        image: debian:buster
+        restart: on-failure
+        env_file:
+            - .env
+        volumes:
+            - data:/var/www/html
+        expose: 
+            - "9000"
+        networks:
+            - inception
+        tty: true
+
+networks:
+    inception:
+        driver: bridge
