@@ -1,3 +1,5 @@
+#https://docs.docker.com/compose/compose-file/build/
+
 version: '3' # latest version of docker compose
 
 volumes:
@@ -20,6 +22,11 @@ services:
 #--------------- NGINX --------------#
     nginx:
         build:
+            context: ./requirements/nginx
+            dockerfile: Dockerfile
+        container_name: "nginx"
+        depends_on:
+            - wordpress
         restart: always
         env_file:
             - .env
