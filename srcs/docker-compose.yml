@@ -19,8 +19,8 @@ services:
 
 #--------------- NGINX --------------#
     nginx:
-        image: debian:buster
-        restart: on-failure
+        build:
+        restart: always
         env_file:
             - .env
         ports:
