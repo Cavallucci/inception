@@ -1,7 +1,7 @@
 FROM debian:buster
-RUN apt-get update && apt-get -y install nginx \
-openssl \
-&& rn -rf /var/lib/apt/lists/*
+
+RUN apt-get update && apt-get -y install nginx openssl
+RUN rn -rf /var/lib/apt/lists/*
 
 RUN		openssl req -new -newkey rsa:4096 -x509 -sha512 -days 365 -nodes  \
 		-subj "/C=FR/ST=Paris/O=42/CN=lcavallu.42.fr"  \

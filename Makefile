@@ -18,7 +18,7 @@ run:
 	@sudo mkdir -p /home/lcavallu/data/wordpress
 	@sudo mkdir -p /home/lcavallu/data/mysql
 	@echo "$(GREEN)Building containers ... $(RESET)"
-	@docker-compose -f $(COMPOSE_FILE) up --build
+	@sudo docker-compose -f $(COMPOSE_FILE) up --build -d
 
 up:
 	@echo "$(GREEN)Building files for volumes ... $(RESET)"
@@ -27,28 +27,22 @@ up:
 	@echo "$(GREEN)Building containers in background ... $(RESET)"
 	@docker-compose -f $(COMPOSE_FILE) up -d --build
 
-debug:
-	@echo "$(GREEN)Building files for volumes ... $(RESET)"
-	@sudo mkdir -p /home/lcavallu/data/wordpress
-	@sudo mkdir -p /home/lcavallu/data/mysql
-	@echo "$(GREEN)Building containers with log information ... $(RESET)"
-	@docker-compose -f $(COMPOSE_FILE) --verbose up
-
 list:	
 	@echo "$(PURPLE)Listing all containers ... $(RESET)"
-	 docker ps -a
+	sudo docker ps -a
 
 list_volumes:
 	@echo "$(PURPLE)Listing volumes ... $(RESET)"
-	docker volume ls
+	sudo docker volume ls
 
-clean: 	
+clean :	
 	@echo "$(RED)Stopping containers ... $(RESET)"
-	@docker-compose -f $(COMPOSE_FILE) down
-	@-docker stop `docker ps -qa`
-	@-docker rm `docker ps -qa`
-	@echo "$(RED)Deleting all images ... $(RESET)"
-	@-docker rmi -f `docker images -qa`
+	docker-compose -f $(COMPOSE_FILE) down
+	docker conatiner prune --force
+
+fclean: 
+	@echo "$(RED)Stopping containers ... $(RESET)"
+	@sudo system prune --all --force
 	@echo "$(RED)Deleting all volumes ... $(RESET)"
 	@-docker volume rm `docker volume ls -q`
 	@echo "$(RED)Deleting all network ... $(RESET)"
