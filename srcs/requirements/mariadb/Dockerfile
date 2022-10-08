@@ -14,10 +14,8 @@ RUN chown -R mysql:mysql /run/mysql /var/lib/mysql
 
 EXPOSE 3306
 
-COPY ./tools/create_database.sh /usr/loval/bin/
-COPY ./conf/wordpress/sql /usr/local/bin/
+COPY ./tools/create_database.sh /usr/local/bin/
+COPY ./conf/my.cnf /etc/mysql/my.cnf
 ENTRYPOINT ["create_database.sh"]
 
 CMD ["mysqld", "--bin-adress=0.0.0.0"]
-
-
