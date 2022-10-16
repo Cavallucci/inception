@@ -45,6 +45,7 @@ services:
 
 #------------- WORDPRESS ------------#
 #https://www.youtube.com/watch?v=yWNUu7zHW6g&list=PLn6POgpklwWqaC1pdx02SrrgOaL2ZL7G0&index=11
+#https://openclassrooms.com/fr/courses/2035766-optimisez-votre-deploiement-en-creant-des-conteneurs-avec-docker/6211677-creez-un-fichier-docker-compose-pour-orchestrer-vos-conteneurs
     wordpress:
         image: debian:buster
         restart: on-failure
