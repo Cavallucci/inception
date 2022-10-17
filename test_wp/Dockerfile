@@ -11,7 +11,7 @@ RUN apt-get update && apt-get -y install \
 	php7.3-mysql \
 	php7.3-mbstring \
 	php7.3-xml 
-#   php7.3-zip \
+#   php7.3-zip 
 #   php7.3-gd \
 #   php7.3-imap 
 
@@ -19,4 +19,4 @@ RUN apt-get update && apt-get -y install \
 
 #EXPOSE 9000
 
-#CMD ["php-fpm7.3", "-F;"]
+CMD ["/usr/sbin/php-fpm7.3", "-F"]
