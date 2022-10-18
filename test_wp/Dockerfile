@@ -6,6 +6,7 @@ FROM debian:buster
 RUN apt-get update && apt-get -y install \
 	mariadb-client \
 	php7.3 \
+	curl \
 	php7.3-fpm \
 	php7.3-curl \
 	php7.3-mysql \
@@ -15,8 +16,19 @@ RUN apt-get update && apt-get -y install \
 #   php7.3-gd \
 #   php7.3-imap 
 
-#COPY ./conf/www.conf /etc/php/7.3/fpm/pool.d
+RUN	mkdir -p /var/www/html ; mkdir -p /run/php
 
-#EXPOSE 9000
+COPY ./conf/www.conf /etc/php/7.3/fpm/pool.d
+
+#Install Wordpress
+RUN	curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
+	chmod +x wp-cli.phar && \
+    mv wp-cli.phar /usr/local/bin/wp
+
+COPY ./tools/create_wp.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/create_wp.sh
+ENTRYPOINT ["create_wp.sh"]
+
+EXPOSE 9000
 
 CMD ["/usr/sbin/php-fpm7.3", "-F"]
