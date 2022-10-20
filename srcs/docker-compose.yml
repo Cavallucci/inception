@@ -1,7 +1,7 @@
 #https://docs.docker.com/compose/compose-file/build/
 #https://openclassrooms.com/fr/courses/2035766-optimisez-votre-deploiement-en-creant-des-conteneurs-avec-docker/6211677-creez-un-fichier-docker-compose-pour-orchestrer-vos-conteneurs
 
-version: '3' 
+version: '3.8' 
 
 services:
 
@@ -10,10 +10,10 @@ services:
 #https://mariadb.com/kb/en/setting-up-a-lamp-stack-with-docker-compose/
     mariadb:
         build:
-            context: ./requirements/nginx
+            context: ./requirements/mariadb
             dockerfile: Dockerfile
         container_name: "mariadb"
-        restart: always
+        restart: on-failure
         volumes:
             - mariadb_data:/var/lib/mysql
         expose:
@@ -22,7 +22,26 @@ services:
             - .env
         networks:
             - inception
-        tty: true
+
+#------------- WORDPRESS ------------#
+#https://www.youtube.com/watch?v=yWNUu7zHW6g&list=PLn6POgpklwWqaC1pdx02SrrgOaL2ZL7G0&index=11
+#https://openclassrooms.com/fr/courses/2035766-optimisez-votre-deploiement-en-creant-des-conteneurs-avec-docker/6211677-creez-un-fichier-docker-compose-pour-orchestrer-vos-conteneurs
+    wordpress:
+        build:
+            context: ./requirements/wordpress
+            dockerfile: Dockerfile
+        container_name: "wordpress"
+        depends_on:
+            - mariadb
+        restart: on-failure
+        env_file:
+            - .env
+        volumes:
+            - wordpress_volume:/var/www/html
+        expose: 
+            - "9000"
+        networks:
+            - inception
 
 #--------------- NGINX --------------#
     nginx:
@@ -32,36 +51,23 @@ services:
         container_name: "nginx"
         depends_on:
             - wordpress
-        restart: always
+        restart: on-failure
         env_file:
             - .env
         ports:
             - "443:443"
         volumes:
-            - worpress_data:/var/www/html/wordpress
+            - worpress_data:/var/www/html
         networks:
             - inception
-        tty: true
 
-#------------- WORDPRESS ------------#
-#https://www.youtube.com/watch?v=yWNUu7zHW6g&list=PLn6POgpklwWqaC1pdx02SrrgOaL2ZL7G0&index=11
-#https://openclassrooms.com/fr/courses/2035766-optimisez-votre-deploiement-en-creant-des-conteneurs-avec-docker/6211677-creez-un-fichier-docker-compose-pour-orchestrer-vos-conteneurs
-    wordpress:
-        image: debian:buster
-        restart: on-failure
-        env_file:
-            - .env
-        volumes:
-            - data:/var/www/html
-        expose: 
-            - "9000"
-        networks:
-            - inception
-        tty: true
+#--------------- NETWORKS --------------#
 
 networks:
     inception:
-        driver: bridge
+        driver: bridge #default
+
+#--------------- VOLUMES --------------#
 
 volumes:
         mariadb_data:
