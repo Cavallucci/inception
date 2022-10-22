@@ -1,7 +1,6 @@
+FROM debian:buster
 #https://www.youtube.com/watch?v=Ik_mC7JSJ-A
 #https://mariadb.com/kb/en/creating-a-custom-docker-image/
-
-FROM debian:buster
 
 RUN apt-get update
 RUN apt-get install -y mariadb-server mariadb-client

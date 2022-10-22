@@ -18,7 +18,8 @@ run:
 	@sudo mkdir -p /home/lcavallu/data/wordpress
 	@sudo mkdir -p /home/lcavallu/data/mysql
 	@echo "$(GREEN)Building containers ... $(RESET)"
-	@sudo docker-compose -f $(COMPOSE_FILE) up --build -d
+	@sudo docker pull debian:buster
+	@sudo docker-compose -f $(COMPOSE_FILE) up --build
 
 up:
 	@echo "$(GREEN)Building files for volumes ... $(RESET)"
@@ -38,7 +39,7 @@ list_volumes:
 clean :	
 	@echo "$(RED)Stopping containers ... $(RESET)"
 	docker-compose -f $(COMPOSE_FILE) down
-	docker conatiner prune --force
+	docker container prune --force
 
 fclean: 
 	@echo "$(RED)Stopping containers ... $(RESET)"
