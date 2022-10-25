@@ -14,43 +14,24 @@ COMPOSE_FILE=./srcs/docker-compose.yml
 all: run
 
 run: 
-	@echo "$(GREEN)Building files for volumes ... $(RESET)"
 	@sudo mkdir -p /home/lcavallu/data/wordpress
 	@sudo mkdir -p /home/lcavallu/data/mysql
-	@echo "$(GREEN)Building containers ... $(RESET)"
-	@sudo docker pull debian:buster
 	@sudo docker-compose -f $(COMPOSE_FILE) up --build
 
-up:
-	@echo "$(GREEN)Building files for volumes ... $(RESET)"
-	@sudo mkdir -p /home/lcavallu/data/wordpress
-	@sudo mkdir -p /home/lcavallu/data/mysql
-	@echo "$(GREEN)Building containers in background ... $(RESET)"
-	@docker-compose -f $(COMPOSE_FILE) up -d --build
-
 list:	
-	@echo "$(PURPLE)Listing all containers ... $(RESET)"
-	sudo docker ps -a
-
-list_volumes:
-	@echo "$(PURPLE)Listing volumes ... $(RESET)"
-	sudo docker volume ls
+	@sudo docker container ps -a ; sudo docker images
 
 clean :	
-	@echo "$(RED)Stopping containers ... $(RESET)"
-	docker-compose -f $(COMPOSE_FILE) down
-	docker container prune --force
+	@sudo docker-compose -f $(COMPOSE_FILE) down
+	@sudo docker container prune --force
 
 fclean: 
-	@echo "$(RED)Stopping containers ... $(RESET)"
-	@sudo system prune --all --force
-	@echo "$(RED)Deleting all volumes ... $(RESET)"
+	@sudo docker container prune --force
 	@-docker volume rm `docker volume ls -q`
-	@echo "$(RED)Deleting all network ... $(RESET)"
 	@-docker network rm `docker network ls -q`
-	@echo "$(RED)Deleting all data ... $(RESET)"
 	@sudo rm -rf /home/lcavallu/data/wordpress
 	@sudo rm -rf /home/lcavallu/data/mysql
-	@echo "$(RED)Deleting all $(RESET)"
+
+re: fclean run
 
 .PHONY: run up debug list list_volumes clean
