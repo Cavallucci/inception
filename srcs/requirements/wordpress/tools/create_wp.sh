@@ -1,10 +1,10 @@
 #!/bin/sh
 
 #if wp is install
-# if [ -f /var/www/html/wp-config.php ]
-# then
-#     echo "wordpress already install"
-# else
+if [ -f /var/www/html/wp-config.php ]
+then
+    echo "wordpress already install"
+else
 #Download wordpress command line interface
 	wp core download --allow-root
 	wp core install http://wordpress.org/latest.tar.gz
@@ -43,6 +43,6 @@
 #Generate article
 	wp post generate --count=1 --post_author="lcavallu" --post_title="I'm a pro" --allow-root
 
-#fi
+fi
 
 exec "$@"

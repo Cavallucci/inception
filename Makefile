@@ -16,7 +16,7 @@ all: run
 run: 
 	@sudo mkdir -p /home/lcavallu/data/wordpress
 	@sudo mkdir -p /home/lcavallu/data/mysql
-	@sudo docker-compose -f $(COMPOSE_FILE) up --build
+	@sudo docker-compose -f $(COMPOSE_FILE) up --build -d
 
 list:	
 	@sudo docker container ps -a ; sudo docker images
@@ -25,12 +25,14 @@ clean :
 	@sudo docker-compose -f $(COMPOSE_FILE) down
 	@sudo docker container prune --force
 
-fclean: 
-	@sudo docker container prune --force
-	@-docker volume rm `docker volume ls -q`
-	@-docker network rm `docker network ls -q`
-	@sudo rm -rf /home/lcavallu/data/wordpress
-	@sudo rm -rf /home/lcavallu/data/mysql
+fclean: clean
+	-sudo docker stop `sudo docker ps -qa`
+	-sudo docker rm `sudo docker ps -qa`
+	-sudo docker rmi -f `sudo docker images -qa`
+	-sudo docker volume rm `sudo docker volume ls -q`
+	-sudo docker network rm `sudo docker network ls -q 2>/dev/null`
+	sudo rm -rf /home/lcavallu/data/wordpress
+	sudo rm -rf /home/lcavallu/data/mysql
 
 re: fclean run
 
