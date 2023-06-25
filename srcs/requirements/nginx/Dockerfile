@@ -18,6 +18,8 @@ RUN		openssl req -new -newkey rsa:4096 -x509 -sha512 -days 365 -nodes  \
 		-out /etc/ssl/certs/nginx_certificate.crt  \
 		-keyout /etc/ssl/private/nginx_certificate.key
 
+RUN	rm /etc/nginx/sites-enabled/default
+
 COPY conf/nginx.conf /etc/nginx/conf.d/
 
 EXPOSE 433

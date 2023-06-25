@@ -41,7 +41,7 @@ else
 	wp theme install "portfoliolite" --activate --allow-root
 
 #Generate article
-	wp post generate --count=1 --post_author="lcavallu" --post_title="I'm a pro" --allow-root
+	wp post generate --count=1 --post_author="lcavallu" --post_title="WELCOOOME :)" --allow-root
 
 fi
 
